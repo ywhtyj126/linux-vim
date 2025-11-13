@@ -1,0 +1,114 @@
+" ================================
+" Vim 专业版配置 by XSimple
+" ================================
+
+" 基础设置
+set nocompatible
+filetype off
+
+" -------------------------------
+" 插件管理 - vim-plug
+" -------------------------------
+call plug#begin('~/.vim/plugged')
+
+" 文件浏览
+Plug 'preservim/nerdtree'
+
+" 状态栏美化
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" 代码补全 / LSP 支持
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Git 支持
+Plug 'tpope/vim-fugitive'
+
+" 模糊搜索
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" 彩色括号匹配
+Plug 'luochen1990/rainbow'
+
+" 语法高亮增强
+Plug 'sheerun/vim-polyglot'
+
+" 代码注释快捷键
+Plug 'preservim/nerdcommenter'
+
+call plug#end()
+
+" -------------------------------
+" 常用编辑配置
+" -------------------------------
+set number
+set relativenumber
+set cursorline
+set ruler
+set encoding=utf-8
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+syntax enable
+set background=dark
+colorscheme desert
+set clipboard=unnamedplus
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" 粘贴模式快捷键
+set pastetoggle=<F2>
+
+" 自动保存光标位置
+augroup resCur
+    autocmd!
+    autocmd BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \   exe "normal! g'\"" |
+        \ endif
+augroup END
+
+" -------------------------------
+" 插件功能绑定
+" -------------------------------
+
+" NERDTree 文件树
+nnoremap <C-n> :NERDTreeToggle<CR>
+
+" FZF 文件搜索
+nnoremap <C-p> :Files<CR>
+
+" COC.nvim 基本快捷键
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ coc#expandable() ? "\<Plug>(coc-snippets-expand)" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <silent><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~ '\s'
+endfunction
+
+" 使用 K 查看文档
+nnoremap <silent> K :call CocActionAsync('doHover')<CR>
+
+" 代码格式化
+nnoremap <silent> <leader>f :call CocAction('format')<CR>
+
+" 彩虹括号
+let g:rainbow_active = 1
+
+" 状态栏主题
+let g:airline_theme='dark'
+let g:airline_powerline_fonts = 1
+
+" -------------------------------
+" NERDCommenter
+" -------------------------------
+let g:NERDCreateDefaultMappings = 1
